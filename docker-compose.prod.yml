@@ -1,0 +1,70 @@
+version: "3"
+
+services:
+
+  pgdb:
+    restart: always
+    image: postgres:alpine
+    environment:
+    - POSTGRES_USER=$DB_USER
+    - POSTGRES_PASSWORD=$DB_PASSWORD
+    ports:
+    - $DB_PORT:$DB_PORT
+    volumes:
+    - ./db/data:/var/lib/postgresql/data
+    command: -p $DB_PORT
+
+  node_api:
+    restart: always
+    build:
+      context: ./server
+      dockerfile: Dockerfile.prod
+    depends_on:
+      - pgdb
+    environment:
+      - NODE_ENV=$API_NODE_ENV
+      - PORT=$API_PORT
+      - PGHOST=pgdb
+      - PGPORT=$DB_PORT
+      - PGUSER=$DB_USER
+      - PGPASSWORD=$DB_PASSWORD
+      - PGDATABASE=$DB_NAME
+    ports:
+      - $API_PORT:$API_PORT
+    volumes:
+      - /app/node_modules
+  
+  client_app:
+    restart: always
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+    depends_on:
+      - node_api
+    environment:
+      - $UI_NODE_ENV
+      - REACT_APP_API_HOST
+    volumes:
+      - /app/node_modules
+      - ./client/build:/app/build
+      
+
+  nginx_web:
+    restart: always
+    image: nginx:alpine
+    depends_on:
+      - client_app
+    ports:
+      - $NGINX_PORT:$NGINX_PORT
+    volumes:
+      - ./client/build:/usr/share/nginx/html 
+
+  adm:
+    restart: always
+    image: adminer:latest
+    depends_on:
+      - nginx_web
+    ports:
+      - $ADM_PORT:$ADM_PORT
+    environment:
+      - ADMINER_DEFAULT_SERVER=pgdb

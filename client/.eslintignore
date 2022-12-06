@@ -14,3 +14,4 @@ dist/
 src/custom.d.ts
 
 *.config.js
+tsconfig.json

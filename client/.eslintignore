@@ -1,0 +1,16 @@
+.eslintrc.js
+
+*.config.js
+
+node_modules
+
+*.css
+*.svg
+
+# ignore build
+build/
+dist/
+
+src/custom.d.ts
+
+*.config.js

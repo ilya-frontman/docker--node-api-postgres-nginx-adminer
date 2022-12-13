@@ -1,4 +1,4 @@
-# NGINX-NODE-REACT-POSTGRES-ADMINER (DOCKER)
+# NODE-API-POSTGRES-NGINX-ADMINER (DOCKER)
 
 ## Development
 docker-compose up -d (uses standard docker-compose.yml and .env file)

@@ -1,5 +1,0 @@
-{
-  "*.(js|jsx|scss|html|ts|tsx)": "yarn run format",
-  "*.(ts|tsx)": "yarn run eslint",
-  "*.scss": "yarn run stylelint"
-}

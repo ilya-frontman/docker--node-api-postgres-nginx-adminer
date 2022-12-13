@@ -1,6 +1,0 @@
-# ignore vendor
-node_modules/
-
-# ignore build
-build/
-dist/
